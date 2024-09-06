@@ -1,0 +1,2 @@
+# FMS24GTP_driver
+FileMakerServer24のデーターAPIをGTPから駆動するToolをアクションとして定義するドライバースキーマー

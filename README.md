@@ -103,7 +103,7 @@ Fork it, contribute, and help shape the future of FileMaker x GPT automation!
 
 6. **Run the Driver / ドライバを実行**:
    Start executive-level prompt engineering by teaching new users how to use your custom app.  
-   さぁ、初めてあなたのカスタムAppを触った人間にカスタムアップの使い方を教えるエグゼクティブなプロンプトエンジニアリングを始めよう！
+   さぁ、初めてあなたのカスタムAppを触った人間にカスタムアップの使い方を教えるエクスペリエンスに近づいた、よりAIが人間と仲良く仕事できるエグゼクティブなプロンプトエンジニアリングを始めよう！
 
 7. **Limit permissions after learning / 学習が終わったら権限を絞る**:
    After learning, restrict permissions for security and communicate this to the GTP agent.  

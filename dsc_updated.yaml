@@ -1,0 +1,345 @@
+info:
+  description: FileMakerデータベースの操作を行うためのAPI - データ操作
+  title: Claris FileMaker Data API
+  version: 1.0.2
+openapi: 3.1.0
+paths:
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/metadata:
+    get:
+      description: 指定されたレイアウトのフィールドやオブジェクトに関するメタデータを取得します。
+      operationId: getLayoutMetadata
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: database
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: layout
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  fields:
+                    items:
+                      properties:
+                        name:
+                          description: フィールド名
+                          type: string
+                        type:
+                          description: フィールドのデータ型
+                          type: string
+                      type: object
+                    type: array
+                type: object
+          description: レイアウトメタデータの取得に成功
+      summary: レイアウトのメタデータを取得
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/records:
+    get:
+      description: 特定のレイアウトに関連するすべてのレコードを取得します。
+      operationId: getRecordsByLayout
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          example: v1
+          type: string
+      - in: path
+        name: database
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: layout
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    items:
+                      properties:
+                        fieldData:
+                          description: レコードのフィールドデータ
+                          type: object
+                        id:
+                          description: レコードID
+                          type: integer
+                      type: object
+                    type: array
+                type: object
+          description: レコードが取得される
+      summary: レイアウトに基づくレコードの取得
+    post:
+      description: 新しいレコードを指定されたレイアウトに作成します。
+      operationId: createRecord
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: database
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: layout
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                fieldData:
+                  description: 作成するレコードのフィールドデータ
+                  type: object
+              type: object
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                properties:
+                  recordId:
+                    description: 作成されたレコードのID
+                    type: integer
+                type: object
+          description: レコードが正常に作成される
+      summary: レコードの作成
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/records/{recordId}:
+    delete:
+      description: 指定されたレコードIDに基づいてレコードを削除します。
+      operationId: deleteRecord
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: database
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: layout
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: recordId
+        required: true
+        schema:
+          type: integer
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      responses:
+        '204':
+          description: レコードが正常に削除される
+      summary: 特定のレコードを削除
+    get:
+      description: 指定されたレコードIDに基づいてレコードを取得します。
+      operationId: getRecordById
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: database
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: layout
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: recordId
+        required: true
+        schema:
+          type: integer
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  fieldData:
+                    description: レコードのフィールドデータ
+                    type: object
+                  id:
+                    description: レコードID
+                    type: integer
+                type: object
+          description: レコードが取得される
+      summary: 特定のレコードを取得
+    patch:
+      description: 指定されたレコードIDに基づいてレコードを更新します。
+      operationId: updateRecord
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: database
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: layout
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: recordId
+        required: true
+        schema:
+          type: integer
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                fieldData:
+                  description: 更新するフィールドデータ
+                  type: object
+              type: object
+        required: true
+      responses:
+        '200':
+          description: レコードが正常に更新される
+      summary: 特定のレコードを更新
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/records/{recordId}/containers/{containerFieldName}:
+    post:
+      description: レイアウト内のコンテナフィールドにファイルをアップロードします。
+      operationId: uploadToContainer
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: database
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: layout
+        required: true
+        schema:
+          type: string
+      - in: path
+        name: recordId
+        required: true
+        schema:
+          type: integer
+      - in: path
+        name: containerFieldName
+        required: true
+        schema:
+          type: string
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+              type: string
+        required: true
+      responses:
+        '200':
+          description: ファイルが正常にアップロードされる
+      summary: コンテナフィールドにファイルをアップロード
+  /fmi/data/{version}/validateSession:
+    get:
+      description: 提供されたセッショントークンが有効かを確認します。
+      operationId: validateSession
+      parameters:
+      - in: path
+        name: version
+        required: true
+        schema:
+          example: v1
+          type: string
+      - in: header
+        name: authorizationToken
+        required: true
+        schema:
+          example: Bearer {token}
+          type: string
+      responses:
+        '200':
+          description: セッションが有効
+        '401':
+          description: セッションが無効または認証エラー
+        '500':
+          description: サーバー内部エラー
+      summary: セッショントークンの有効性を確認
+servers:
+- description: FileMaker Data APIのサーバー
+  url: https://quantaril.cloud

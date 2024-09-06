@@ -1,0 +1,64 @@
+openapi: 3.1.0
+info:
+  title: Claris FileMaker Data API
+  description: FileMakerデータベースの操作を行うためのAPI - スクリプト操作
+  version: 1.0.2
+servers:
+  - url: https://quantaril.cloud
+    description: FileMaker Data APIのサーバー
+paths:
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/script/{scriptName}:
+    get:
+      operationId: executeScript
+      summary: スクリプトを実行
+      description: 指定されたデータベースとレイアウトでスクリプトを実行します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+            example: v1
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: layout
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scriptName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: 実行するスクリプトの名前
+        - name: scriptParam
+          in: query
+          required: false
+          schema:
+            type: string
+          description: スクリプトに渡すパラメータ
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer {token}
+      responses:
+        '200':
+          description: スクリプトの実行に成功し、結果が返される
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  scriptResult:
+                    type: string
+                    description: スクリプトの実行結果
+        '401':
+          description: 認証エラー、またはアクセス権限が不足している
+        '500':
+          description: サーバー内部エラー

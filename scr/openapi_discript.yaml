@@ -1,0 +1,173 @@
+openapi: 3.1.0
+info:
+  title: Claris FileMaker Data API
+  description: FileMakerデータベースの操作を行うためのAPI - 統合版
+  version: 1.0.2
+servers:
+  - url: https://quantaril.cloud
+    description: FileMaker Data APIのサーバー
+
+# システム情報取得
+paths:
+  /fmi/data/{version}/productInfo:
+    get:
+      operationId: getProductInfo
+      summary: FileMakerサーバー情報を取得
+      description: FileMakerサーバーやクラウドのバージョン情報などを取得します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+            example: v1
+      responses:
+        '200':
+          description: サーバー情報の取得に成功
+        '401':
+          description: 認証エラー
+        '500':
+          description: サーバー内部エラー
+
+  /fmi/data/{version}/validateSession:
+    get:
+      operationId: validateSession
+      summary: セッショントークンの有効性を確認
+      description: 提供されたセッショントークンが有効かを確認します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: セッションが有効
+        '401':
+          description: 認証エラー
+        '500':
+          description: サーバー内部エラー
+
+# データ操作
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/records:
+    get:
+      operationId: getRecordsByLayout
+      summary: レイアウトに基づくレコードの取得
+    post:
+      operationId: createRecord
+      summary: レコードの作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fieldData:
+                  type: object
+                  description: 作成するレコードのフィールドデータ
+      responses:
+        '201':
+          description: レコード作成成功
+
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/records/{recordId}:
+    get:
+      operationId: getRecordById
+      summary: 特定のレコードを取得
+    patch:
+      operationId: updateRecord
+      summary: 特定のレコードを更新
+    delete:
+      operationId: deleteRecord
+      summary: 特定のレコードを削除
+
+# スクリプト操作
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/script/{scriptName}:
+    get:
+      operationId: executeScript
+      summary: スクリプトを実行
+      parameters:
+        - name: scriptParam
+          in: query
+          required: false
+          schema:
+            type: string
+          description: スクリプトに渡すパラメータ
+      responses:
+        '200':
+          description: スクリプトの実行結果が返される
+
+# 構造体操作
+  /fmi/data/{version}/databases/{database}/globals:
+    patch:
+      operationId: setGlobals
+      summary: グローバルフィールドの設定
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                globalFields:
+                  type: object
+                  description: 設定するグローバルフィールドとその値
+      responses:
+        '200':
+          description: グローバルフィールドが正常に設定される
+
+# レイアウト操作
+  /fmi/data/{version}/databases/{database}/layouts:
+    get:
+      operationId: getLayouts
+      summary: レイアウト一覧を取得
+      responses:
+        '200':
+          description: レイアウト一覧の取得に成功
+
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/metadata:
+    get:
+      operationId: getLayoutMetadata
+      summary: レイアウトのメタデータを取得
+      responses:
+        '200':
+          description: レイアウトメタデータの取得に成功
+
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/_find:
+    post:
+      operationId: findRecords
+      summary: レイアウト内のレコードを検索
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: array
+                  items:
+                    type: object
+      responses:
+        '200':
+          description: 検索結果が返される
+
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/records/{recordId}/containers/{containerFieldName}:
+    post:
+      operationId: uploadToContainer
+      summary: コンテナフィールドにファイルをアップロード
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: ファイルが正常にアップロードされる

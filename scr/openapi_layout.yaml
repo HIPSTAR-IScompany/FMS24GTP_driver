@@ -1,0 +1,208 @@
+openapi: 3.1.0
+info:
+  title: Claris FileMaker Data API - レイアウトデザイン操作
+  version: 1.0.2
+servers:
+  - url: https://quantaril.cloud
+    description: FileMaker Data APIのサーバー
+
+paths:
+  /fmi/data/{version}/databases/{database}/layouts:
+    get:
+      operationId: getLayouts
+      summary: レイアウト一覧を取得
+      description: 指定されたデータベースの利用可能なレイアウトを一覧で取得します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+            example: v1
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer {token}
+      responses:
+        '200':
+          description: レイアウト一覧の取得に成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  layouts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: レイアウトの名前
+                          example: "顧客管理レイアウト"
+
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/metadata:
+    get:
+      operationId: getLayoutMetadata
+      summary: レイアウトのメタデータを取得
+      description: 指定されたレイアウトのフィールドやオブジェクトに関するメタデータを取得します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: layout
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer {token}
+      responses:
+        '200':
+          description: レイアウトメタデータの取得に成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fields:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: フィールド名
+                        type:
+                          type: string
+                          description: フィールドのデータ型
+
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/_find:
+    post:
+      operationId: findRecords
+      summary: レイアウト内のレコードを検索
+      description: 指定された条件に基づいて、レイアウト内でレコードを検索します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: layout
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer {token}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: array
+                  description: 検索条件を含むクエリ
+                  items:
+                    type: object
+                    properties:
+                      fieldName:
+                        type: string
+                      value:
+                        type: string
+      responses:
+        '200':
+          description: 検索結果が返される
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: レコードID
+                        fieldData:
+                          type: object
+                          description: 各フィールドのデータ
+
+  /fmi/data/{version}/databases/{database}/layouts/{layout}/records/{recordId}/containers/{containerFieldName}:
+    post:
+      operationId: uploadToContainer
+      summary: コンテナフィールドにファイルをアップロード
+      description: レイアウト内のコンテナフィールドにファイルをアップロードします。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: layout
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: containerFieldName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer {token}
+      requestBody:
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        '200':
+          description: ファイルが正常にアップロードされる

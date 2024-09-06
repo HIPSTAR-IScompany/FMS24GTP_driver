@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Claris FileMaker Data API
+  description: FileMakerデータベースの操作を行うためのAPI - 構造体操作
+  version: 1.0.2
+servers:
+  - url: https://quantaril.cloud
+    description: FileMaker Data APIのサーバー
+paths:
+  /fmi/data/{version}/databases/{database}/globals:
+    patch:
+      operationId: setGlobals
+      summary: グローバルフィールドの設定
+      description: データベース内のグローバルフィールドの値を設定します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+            example: v1
+        - name: database
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer {token}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                globalFields:
+                  type: object
+                  description: 設定するグローバルフィールドとその値
+                  example:
+                    someGlobalField: "新しい値"
+      responses:
+        '200':
+          description: グローバルフィールドが正常に設定された
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    description: 処理結果
+        '401':
+          description: 認証エラー、またはアクセス権限が不足している
+        '500':
+          description: サーバー内部エラー

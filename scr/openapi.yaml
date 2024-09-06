@@ -1,0 +1,67 @@
+openapi: 3.1.0
+info:
+  title: Claris FileMaker Data API
+  description: FileMakerデータベースの操作を行うためのAPI - システム情報取得
+  version: 1.0.2
+servers:
+  - url: https://quantaril.cloud
+    description: FileMaker Data APIのサーバー
+paths:
+  /fmi/data/{version}/productInfo:
+    get:
+      operationId: getProductInfo
+      summary: FileMakerサーバー情報を取得
+      description: FileMakerサーバーやクラウドのバージョン情報などを取得します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+            example: v1
+      responses:
+        '200':
+          description: サーバー情報の取得に成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productName:
+                    type: string
+                    description: サーバーの名前（製品名）
+                    example: "FileMaker Server"
+                  version:
+                    type: string
+                    description: サーバーのバージョン
+                    example: "19.1.2"
+        '401':
+          description: 認証エラー、またはアクセス権限が不足している
+        '500':
+          description: サーバー内部エラー
+
+  /fmi/data/{version}/validateSession:
+    get:
+      operationId: validateSession
+      summary: セッショントークンの有効性を確認
+      description: 提供されたセッショントークンが有効かを確認します。
+      parameters:
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+            example: v1
+        - name: authorizationToken
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer {token}
+      responses:
+        '200':
+          description: セッションが有効
+        '401':
+          description: セッションが無効または認証エラー
+        '500':
+          description: サーバー内部エラー

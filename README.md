@@ -82,14 +82,24 @@ Fork it, contribute, and help shape the future of FileMaker x GPT automation!
    - ![Manual](#)
 
 5. **Configure Your API Keys in `.env` / APIキーを`.env`に設定**:
+   ```gtp
+   下記の環境変数をドキュメントルートにいい感じでドットファイルズとして.envとして生成して、
+   .gitignoreとか作ってセキュアな構造にしてください。
+   ```
+
    ```bash
    FILEMAKER_BASE_URL=your_data_centerURL
    FILEMAKER_WORK_APP=your_customapp_name
-   FILEMAKER_API_KEY=your_api_key_here
-   GTP_KEY=your_gtp_key_here
+   GTP_USER=your_customApp_login_ID
+   GTP_PASS=your_customApp_Login_password
    ```
    Just ask GTP to handle the above commands! Very secure.  
-   上記コマンドをGTPにお願いするだけ！非常にセキュア。さらにchmonをお願いすると、セキュアな環境の爆誕だ！
+   上記コマンドをGTPにお願いするだけ！非常にセキュア。さらにchmodをお願いすると、セキュアな環境の爆誕だ！
+
+   ```gtp
+   .envはすごく大事なファイルなのでパクられないようにchmod等を駆使してあなただけが参照できるようにしてください。
+   ```
+
 
 6. **Run the Driver / ドライバを実行**:
    Start executive-level prompt engineering by teaching new users how to use your custom app.  

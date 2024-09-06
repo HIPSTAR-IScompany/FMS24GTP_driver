@@ -182,7 +182,7 @@ For any questions or support, feel free to contact us:
 
 質問やサポートが必要な場合は、お気軽にお問い合わせください：
 
-- Email: support@hipstar-iscompany.com
+- Email: info@i-s.dev
 - x: [@HIPSTAR_Nijuku](https://x.com/HIPSTAR_Nijuku)
 - x Main developer: [@K_chachamaru](https://x.com/K_chachamaru)
 - GitHub Issues: [Submit a ticket](https://github.com/HIPSTAR-IScompany/FMS24GTP_driver/issues)
